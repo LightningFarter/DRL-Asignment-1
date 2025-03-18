@@ -85,7 +85,7 @@ def get_obs_state(obs, has_pas=False, current_des_sta=0):
             if passenger_look:
                 # this block has passenger
                 return_value = (
-                    distance_compression(relative_dist),obstacles,True, False, 
+                    distance_compression(relative_dist), obstacles, True, False, 
                     relative_dist, has_pas, current_des_sta)
                 return return_value
             else:
@@ -113,7 +113,7 @@ def get_action(obs):
     #       Otherwise, even if your agent performs well in training, it may fail during testing.
 
 
-    return random.choice([0, 1, 2, 3, 4, 5]) # Choose a random action
+    return random.choice([0, 1]) # Choose a random action
     # You can submit this random agent to evaluate the performance of a purely random strategy.
 
 

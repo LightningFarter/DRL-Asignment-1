@@ -23,3 +23,7 @@ q_table = {}
 
 def train_agent():
     env = SimpleTaxiEnv(grid_size=5, fuel_limit=5000)
+    
+    for episode in range(num_episodes):
+        obs, _ = env.reset()
+        
