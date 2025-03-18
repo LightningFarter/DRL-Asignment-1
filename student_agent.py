@@ -24,6 +24,9 @@ state = (
 )
 '''
 
+with open('policy_table.pkl', 'rb') as f:
+    policy_table = pickle.load(f)
+
 def distance_compression(relative_distance):
     if relative_distance[0] > 0:
         x = 1
@@ -53,6 +56,12 @@ returns (
     current_heading_destination_index -> int,
     )
 '''
+
+current_has_passenger = False
+current_destination_index = 0
+
+action_space = [0, 1, 2, 3, 4, 5]
+last_action = -1
 
 def get_obs_state(obs, has_pas=False, current_des_sta=0):
     taxi_row = obs[0]
@@ -104,19 +113,28 @@ def get_obs_state(obs, has_pas=False, current_des_sta=0):
             relative_dist, has_pas, current_des_sta)
         return return_value
 
-n = 0
-
 def get_action(obs):
+    global current_has_passenger
+    global current_destination_index
     
-    # TODO: Train your own agent
-    # HINT: If you're using a Q-table, consider designing a custom key based on `obs` to store useful information.
-    # NOTE: Keep in mind that your Q-table may not cover all possible states in the testing environment.
-    #       To prevent crashes, implement a fallback strategy for missing keys. 
-    #       Otherwise, even if your agent performs well in training, it may fail during testing.
-
-    global n
-    n = n ^ 1
-    return n # Choose a random action
-    # You can submit this random agent to evaluate the performance of a purely random strategy.
-
+    rdd, ofw, cp, cd, _, chp, chd = get_obs_state(obs, current_has_passenger, current_destination_index)
+    
+    state = (rdd, ofw, cp, cd)
+    # print(state)
+    if state in policy_table:
+        action = np.random.choice(action_space, p=policy_table[state])
+        # print(f"action = {action}")
+    else:
+        # print("not in policy")
+        action = np.random.choice([0, 1, 2, 3])
+    
+    current_has_passenger = chp
+    current_destination_index = chd
+    
+    if action == 4:
+        current_has_passenger = True
+    elif action == 5:
+        current_has_passenger = False
+    
+    return action
 
