@@ -148,12 +148,12 @@ def get_action(obs):
     rdd, ofw, cp, cd, _, chp, chd = get_obs_state(obs, current_has_passenger, current_destination_index)
     
     state = (rdd, ofw, cp, cd)
-    print(state)
+    # print(state)
     if state in policy_table:
         action = np.random.choice(action_space, p=policy_table[state])
-        print(f"action = {action}")
+        # print(f"action = {action}")
     else:
-        print("not in policy")
+        # print("not in policy")
         action = np.random.choice([0, 1, 2, 3])
     
     current_has_passenger = chp

@@ -31,7 +31,7 @@ class SimpleTaxiEnv():
             for j in range(grid_size):
                 if (i, j) in self.stations:
                     continue
-                if random.random() > 0.7:
+                if random.random() > 0.9:
                     self.obstacles.add((i, j))
         self.destination = None
 
