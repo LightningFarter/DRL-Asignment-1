@@ -66,7 +66,7 @@ last_action = -1
 def get_obs_state(obs, has_pas=False, current_des_sta=0):
     taxi_row = obs[0]
     taxi_col = obs[1]
-    stations = [(obs[2], obs[3]), (obs[4], obs[5]), (obs[6], obs[7]), (obs[8], obs[9])]
+    stations = [(obs[2], obs[3]), (obs[4], obs[5]), (obs[8], obs[9]), (obs[6], obs[7])]
     obstacles = tuple(obs[10:14])
     passenger_look = obs[14]
     destination_look = obs[15]
@@ -113,14 +113,43 @@ def get_obs_state(obs, has_pas=False, current_des_sta=0):
             relative_dist, has_pas, current_des_sta)
         return return_value
 
+
+'''
+state = (
+    taxi_row, 0
+    taxi_col, 1
+    self.stations[0][0], 2
+    self.stations[0][1], 3
+    self.stations[1][0], 4
+    self.stations[1][1], 5
+    self.stations[2][0], 6
+    self.stations[2][1], 7
+    self.stations[3][0], 8
+    self.stations[3][1], 9
+    obstacle_north, 10
+    obstacle_south, 11
+    obstacle_east, 12
+    obstacle_west, 13
+    passenger_look, 14
+    destination_look 15
+)
+'''
+
 def get_action(obs):
     global current_has_passenger
     global current_destination_index
+    global last_action
+    
+    if last_action == 4 and obs[14] == 1:
+        current_has_passenger = True
+    elif last_action == 5:
+        current_has_passenger = False
     
     rdd, ofw, cp, cd, _, chp, chd = get_obs_state(obs, current_has_passenger, current_destination_index)
     
     state = (rdd, ofw, cp, cd)
     # print(state)
+    # print(_)
     if state in policy_table:
         action = np.random.choice(action_space, p=policy_table[state])
         # print(f"action = {action}")
@@ -131,10 +160,7 @@ def get_action(obs):
     current_has_passenger = chp
     current_destination_index = chd
     
-    if action == 4:
-        current_has_passenger = True
-    elif action == 5:
-        current_has_passenger = False
+    last_action = action
     
     return action
 
