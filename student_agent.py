@@ -104,6 +104,8 @@ def get_obs_state(obs, has_pas=False, current_des_sta=0):
             relative_dist, has_pas, current_des_sta)
         return return_value
 
+n = 0
+
 def get_action(obs):
     
     # TODO: Train your own agent
@@ -112,8 +114,8 @@ def get_action(obs):
     #       To prevent crashes, implement a fallback strategy for missing keys. 
     #       Otherwise, even if your agent performs well in training, it may fail during testing.
 
-
-    return random.choice([0, 1]) # Choose a random action
+    n = n ^ 1
+    return n # Choose a random action
     # You can submit this random agent to evaluate the performance of a purely random strategy.
 
 
