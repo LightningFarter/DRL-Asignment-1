@@ -14,7 +14,7 @@ import random
 
 
 class SimpleTaxiEnv():
-    def __init__(self, grid_size=5, fuel_limit=50):
+    def __init__(self, grid_size=10, fuel_limit=50):
         """
         Custom Taxi environment supporting different grid sizes.
         """
@@ -27,6 +27,12 @@ class SimpleTaxiEnv():
         self.passenger_loc = None
        
         self.obstacles = set()  # No obstacles in simple version
+        for i in range(grid_size):
+            for j in range(grid_size):
+                if (i, j) in self.stations:
+                    continue
+                if random.random() > 0.7:
+                    self.obstacles.add((i, j))
         self.destination = None
 
     def reset(self):
@@ -141,11 +147,11 @@ class SimpleTaxiEnv():
             grid[py][px] = 'P'
         '''
         
-        
+        # [(0, 0), (0, self.grid_size - 1), (self.grid_size - 1, 0), (self.grid_size - 1, self.grid_size - 1)]
         grid[0][0]='R'
-        grid[0][4]='G'
-        grid[4][0]='Y'
-        grid[4][4]='B'
+        grid[0][self.grid_size - 1]='G'
+        grid[self.grid_size - 1][0]='Y'
+        grid[self.grid_size - 1][self.grid_size - 1]='B'
         '''
         # Place destination
         dy, dx = destination_pos
@@ -156,6 +162,9 @@ class SimpleTaxiEnv():
         ty, tx = taxi_pos
         if 0 <= tx < self.grid_size and 0 <= ty < self.grid_size:
             grid[ty][tx] = '🚖'
+        
+        for i, j in self.obstacles:
+            grid[i][j] = 'x'
 
         # Print step info
         print(f"\nStep: {step}")

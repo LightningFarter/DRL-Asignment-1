@@ -67,7 +67,7 @@ def get_obs_state(obs, has_pas=False, current_des_sta=0):
     taxi_row = obs[0]
     taxi_col = obs[1]
     stations = [(obs[2], obs[3]), (obs[4], obs[5]), (obs[8], obs[9]), (obs[6], obs[7])]
-    obstacles = tuple(obs[10:14])
+    obstacles = (obs[11], obs[10], obs[12], obs[13]) # tuple(obs[10:14])
     passenger_look = obs[14]
     destination_look = obs[15]
     current_des = stations[current_des_sta]
@@ -148,13 +148,12 @@ def get_action(obs):
     rdd, ofw, cp, cd, _, chp, chd = get_obs_state(obs, current_has_passenger, current_destination_index)
     
     state = (rdd, ofw, cp, cd)
-    # print(state)
-    # print(_)
+    print(state)
     if state in policy_table:
         action = np.random.choice(action_space, p=policy_table[state])
-        # print(f"action = {action}")
+        print(f"action = {action}")
     else:
-        # print("not in policy")
+        print("not in policy")
         action = np.random.choice([0, 1, 2, 3])
     
     current_has_passenger = chp
